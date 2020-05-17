@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="#0B0235"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <EditText
+
+            android:id="@+id/add_event_name"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/edittext_back"
+            android:hint="@string/add_event_name"
+            android:inputType="textShortMessage"
+            android:layout_margin="20dp"
+            android:gravity="center" />
+
+        <Spinner
+            android:id="@+id/spinner1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:id="@+id/add_event_desc"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:background="@drawable/edittext_back"
+            android:hint="@string/add_event_desc"
+            android:inputType="textLongMessage"
+            android:layout_margin="20dp"
+            android:gravity="center" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_height="wrap_content">
+            <EditText
+                android:layout_weight="1"
+                android:id="@+id/location_text"
+                android:layout_width="wrap_content"
+                android:layout_height="200dp"
+                android:background="@drawable/edittext_back"
+                android:hint="@string/add_location"
+                android:inputType="textLongMessage"
+                android:layout_margin="20dp"
+                android:gravity="center" />
+            <Button
+                android:background="@drawable/button_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/add_location"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:textAllCaps="false"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:id="@+id/add_loc" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_height="wrap_content">
+
+            <ImageButton
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@mipmap/time_icon"
+                android:layout_margin="10dp"
+                android:id="@+id/set_event_start_time"
+                android:contentDescription="TODO" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/start_date_not_set"
+                android:gravity="center"
+                android:textSize="30sp"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                android:id="@+id/event_start_time"
+                android:layout_margin="10dp">
+
+            </TextView>
+
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_height="wrap_content">
+
+            <ImageButton
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@mipmap/time_icon"
+                android:layout_margin="10dp"
+                android:id="@+id/set_event_end_time" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/start_date_not_set"
+                android:gravity="center"
+                android:textSize="30sp"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                android:id="@+id/event_end_time"
+                android:layout_margin="10dp">
+            </TextView>
+
+
+        </LinearLayout>
+
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <TextView
+            android:background="@android:color/holo_green_dark"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/interval_type"></TextView>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/interval_type_listener">
+            <RadioGroup
+                android:background="@android:color/holo_green_dark"
+                android:id="@+id/interval_type"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <RadioButton
+                    android:layout_weight="1"
+                    android:text="@string/no_interval"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <RadioButton
+                    android:layout_weight="1"
+                    android:text="@string/days"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <RadioButton
+                    android:layout_weight="1"
+                    android:text="@string/weeks"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <RadioButton
+                    android:layout_weight="1"
+                    android:text="@string/months"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <RadioButton
+                    android:layout_weight="1"
+                    android:text="@string/years"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                </RadioButton>
+            </RadioGroup>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/interval_layout"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:background="@drawable/edittext_back"
+                android:id="@+id/get_times"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:hint="@string/add_event_name"
+                android:inputType="numberDecimal" />
+
+            <TextView
+                android:textColor="#FFFFFF"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="@string/times"
+                android:layout_margin="5dp"
+                android:gravity="center" />
+            <EditText
+                android:layout_weight="1"
+                android:id="@+id/interval_value"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@android:color/white"
+                android:hint="@string/add_event_name"
+                android:inputType="numberDecimal"
+                android:layout_margin="5dp"
+                android:gravity="center"
+                 />
+            <TextView
+                android:id="@+id/interval_type_text"
+                android:textColor="#FFFFFF"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="@string/interval_type"
+                android:layout_margin="5dp"
+                android:gravity="center" />
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="vertical"
+            android:id="@+id/event_reminders"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <Button
+                android:background="@drawable/edittext_back"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/add_reminder_button"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:textAllCaps="false"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:id="@+id/create_reminder" />
+        </LinearLayout>
+    </LinearLayout>
+        <LinearLayout
+            android:orientation="vertical"
+            android:id="@+id/gf"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:text="reminder"
+                    android:layout_height="wrap_content">
+                </TextView>
+            </LinearLayout>
+    </LinearLayout>
+        <Button
+            android:background="@drawable/button_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/add_event_button"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:textAllCaps="false"
+            android:textStyle="bold"
+            android:textColor="@android:color/black"
+            android:id="@+id/add_event" />
+
+    </LinearLayout>
+
+</ScrollView>

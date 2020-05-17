@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="#0B0235"
+    android:layout_height="wrap_content">
+   <LinearLayout
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:orientation="vertical">
+       <TextView
+           android:padding="20dp"
+           android:background="#1B0303"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:gravity="center"
+           android:textSize="50sp"
+           android:textColor="@android:color/white"
+           android:textStyle="bold"
+           android:text="REMINDER INFORMATIONS"
+
+    <LinearLayout
+        android:layout_margin="20dp"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+
+        <ImageButton
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@mipmap/time_icon"
+            android:layout_margin="10dp"
+            android:id="@+id/set_reminder_time"
+            android:contentDescription="TODO" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/start_time"
+            android:gravity="center"
+            android:textSize="30sp"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:id="@+id/event_start_time"
+            android:layout_margin="10dp">
+
+        </TextView>
+
+
+
+
+
+    </LinearLayout>
+   </LinearLayout>
+
+</ScrollView>
