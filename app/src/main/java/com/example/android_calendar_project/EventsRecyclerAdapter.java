@@ -2,7 +2,6 @@ package com.example.android_calendar_project;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.strictmode.SqliteObjectLeakedViolation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +13,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class EventsRecyclerAdapter extends RecyclerView.Adapter<EventsRecyclerAdapter.MyViewHolder> {
     Context context;
@@ -41,27 +39,25 @@ public class EventsRecyclerAdapter extends RecyclerView.Adapter<EventsRecyclerAd
     holder.delete.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            delete_event(event.getEVENT_ID(),event.getPARENT_EVENT_ID());
+            delete_event(event.getEVENT_ID());
             arrayList.remove(position);
             notifyDataSetChanged();
         }
     });
-    String interval = String.valueOf(event.getFREQUENCY());
+        String interval = String.valueOf(event.getINTERVAL());
     if (interval == "0.00"){
         interval = "No Interval Selected";
     }else{
         interval += " Day Interval";
     }
     holder.interval.setText(interval);
-    if (event.getEND_TIME()!="null"){
-        holder.end_date.setText( event.getEND_DATE() );
-        holder.end_time.setText( event.getEND_TIME() );
+        holder.end_date.setText(CustomCalendarView.final_only_date_format.format(event.getEND_DATE()));
+        holder.end_time.setText(CustomCalendarView.final_only_time_format.format(event.getEND_DATE()));
 
         LinearLayout linearLayout = (LinearLayout) holder.end_time.getParent();
         linearLayout.setWeightSum(0);
-    }
-    holder.start_time.setText(event.getSTART_TIME());
-    holder.start_date.setText(event.getSTART_DATE());
+        holder.start_time.setText(CustomCalendarView.final_only_date_format.format(event.getSTART_DATE()));
+        holder.start_date.setText(CustomCalendarView.final_only_time_format.format(event.getSTART_DATE()));
 
     }
 
@@ -76,25 +72,24 @@ public class EventsRecyclerAdapter extends RecyclerView.Adapter<EventsRecyclerAd
         ImageButton delete, edit ;
         public MyViewHolder(@NonNull View itemView){
             super(itemView);
-            start_date = itemView.findViewById(R.id.single_event_start_date);
-            start_time = itemView.findViewById(R.id.single_start_event_time);
-            event_name = itemView.findViewById(R.id.single_event_name);
-            end_date = itemView.findViewById(R.id.single_event_end_date);
-            end_time = itemView.findViewById(R.id.single_end_event_time);
-            interval = itemView.findViewById(R.id.single_event_interval);
-            event_type = itemView.findViewById(R.id.single_event_type);
-            delete = itemView.findViewById(R.id.delete_event);
-            edit = itemView.findViewById(R.id.edit_event);
+            start_date = itemView.findViewById(R.id.SINGLE_EVENT_start_date);
+            start_time = itemView.findViewById(R.id.SINGLE_EVENT_start_time);
+            event_name = itemView.findViewById(R.id.SINGLE_EVENT_name);
+            end_date = itemView.findViewById(R.id.SINGLE_EVENT_end_date);
+            end_time = itemView.findViewById(R.id.SINGLE_EVENT_end_time);
+            interval = itemView.findViewById(R.id.SINGLE_EVENT_interval);
+            event_type = itemView.findViewById(R.id.SINGLE_EVENT_type);
+            delete = itemView.findViewById(R.id.SINGLE_EVENT_delete_IMAGE_BUTTON);
+            edit = itemView.findViewById(R.id.SINGLE_EVENT_edit_IMAGE_BUTTON);
 
 
         }
 
     }
-    private void delete_event(int id , int parent_id ){
+    private void delete_event(int id ){
         dbOpenHelper= new DBOpenHelper(context);
         SQLiteDatabase database = dbOpenHelper.getWritableDatabase();
-        dbOpenHelper.delete_event(id,parent_id,database);
+        dbOpenHelper.delete_event(id,database);
         dbOpenHelper.close();
     }
 }
-

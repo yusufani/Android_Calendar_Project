@@ -2,10 +2,13 @@ package com.example.android_calendar_project;
 //TODO ZAMAN KALIRSA LAYOUTLAR ARASINA ÇİZGİLER EKLE AYRI OLSUN
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
-import android.app.TimePickerDialog;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.AttributeSet;
@@ -13,48 +16,45 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.TimePicker;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.TimeZone;
 
 public class CustomCalendarView extends LinearLayout {
-    Spinner spinner;
-    ImageButton next_button, previous_button;
-    TextView current_date;
-    GridView gridView;
-    GridAdapter gridAdapter;
-    SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM yyyy", Locale.ENGLISH);
-    SimpleDateFormat monthFormat = new SimpleDateFormat("MMMM", Locale.ENGLISH);
-    SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy", Locale.ENGLISH);
-    SimpleDateFormat eventDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
     private static final int MAX_CALENDAR_DAY = 42;
-    Calendar calendar = Calendar.getInstance(Locale.ENGLISH);
-    DBOpenHelper dbOpenHelper;
+    public static SimpleDateFormat final_all_time_and_date_format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    public static SimpleDateFormat final_only_date_format = new SimpleDateFormat("yyyy-MM-dd");
+    public static SimpleDateFormat final_only_time_format = new SimpleDateFormat("HH:mm");
+    static ArrayList<TextView> weeks = new ArrayList<>();
+    static TextView current_date_year, current_date_month;
+    static GridView gridView;
+    static GridAdapter gridAdapter;
+    static SimpleDateFormat monthFormat = new SimpleDateFormat("MMMM", Locale.ENGLISH);
+    static SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy", Locale.ENGLISH);
+    static SimpleDateFormat eventDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+    static Calendar calendar = Calendar.getInstance(Locale.ENGLISH);
+    static DBOpenHelper dbOpenHelper;
+    static Context context;
+    static List<Date> dates = new ArrayList<>();
+    static List<Events> eventsList = new ArrayList<>();
+    ArrayList<String> months = get_months();
+    TextView week1, week2, week3, week4, week5, week6;
+    String TAG = "CUSTOM_CALENDAR_VIEW";
+    ImageButton next_button, previous_button;
     AlertDialog alertDialog;
-    Context context;
-    List<Date> dates = new ArrayList<>();
-    List<Events> eventsList = new ArrayList<>();
 
     public CustomCalendarView(Context context) {
         super(context);
@@ -69,6 +69,131 @@ public class CustomCalendarView extends LinearLayout {
         this.context = context;
         initializeLayout();
         set_up_calendar();
+    }
+
+    public static void set_up_calendar() {
+        String currwntDate = monthFormat.format(calendar.getTime());
+        current_date_month.setText(currwntDate);
+        currwntDate = yearFormat.format(calendar.getTime());
+        current_date_year.setText(currwntDate);
+        dates.clear();
+        Calendar month_Calendar = (Calendar) calendar.clone();
+        month_Calendar.set(Calendar.DAY_OF_MONTH, 1);
+        int FirstDayOfMont = month_Calendar.get(Calendar.DAY_OF_WEEK) - 1;
+        month_Calendar.add(Calendar.DAY_OF_MONTH, -FirstDayOfMont);
+        collect_events_per_month(calendar.getTime());
+        int j = 0;
+        while (dates.size() < MAX_CALENDAR_DAY) {
+            if (dates.size() % 7 == 0) {
+                weeks.get(j).setText(String.valueOf(month_Calendar.get(Calendar.WEEK_OF_YEAR)));
+                j++;
+            }
+            dates.add(month_Calendar.getTime());
+            month_Calendar.add(Calendar.DAY_OF_MONTH, 1);
+        }
+        gridAdapter = new GridAdapter(context, dates, calendar, eventsList);
+        gridView.setAdapter(gridAdapter);
+    }
+
+    private static void collect_events_per_month(Date date) {
+        eventsList.clear();
+        dbOpenHelper = new DBOpenHelper(context);
+        SQLiteDatabase database = dbOpenHelper.getReadableDatabase();
+        Cursor cursor = dbOpenHelper.ReadEventperMonth(date, database);
+        while (cursor.moveToNext()) {
+            Events events = dbOpenHelper.getEventFromCursor(cursor);
+            eventsList.add(events);
+        }
+        cursor.close();
+        dbOpenHelper.close();
+    }
+
+    public static Events get_event(int event_id, Context context) {
+        Events event = null;
+        DBOpenHelper dbOpenHelper = new DBOpenHelper(context);
+        SQLiteDatabase database = dbOpenHelper.getReadableDatabase();
+        Cursor cursor = dbOpenHelper.read_spesific_event(String.valueOf(event_id), database);
+        while (cursor.moveToNext()) {
+            event = dbOpenHelper.getEventFromCursor(cursor);
+        }
+        cursor.close();
+        dbOpenHelper.close();
+        return event;
+    }
+
+    public static Reminder get_remind(int remid_id, Context context) {
+        Reminder reminder = null;
+        DBOpenHelper dbOpenHelper = new DBOpenHelper(context);
+        SQLiteDatabase database = dbOpenHelper.getReadableDatabase();
+        Cursor cursor = dbOpenHelper.read_spesific_reminder(String.valueOf(remid_id), database);
+        while (cursor.moveToNext()) {
+            reminder = dbOpenHelper.getReminderFromCursor(cursor);
+        }
+        cursor.close();
+        dbOpenHelper.close();
+        return reminder;
+    }
+
+    public static void update_event(Events event, Context context) {
+        DBOpenHelper dbOpenHelper = new DBOpenHelper(context);
+        SQLiteDatabase database = dbOpenHelper.getReadableDatabase();
+        dbOpenHelper.update_event(event, database);
+        dbOpenHelper.close();
+    }
+
+    public static Boolean get_bool(int val) {
+        return val >= 1;
+    }
+
+    public static ArrayList<Events> collectsAllevents() {
+        ArrayList<Events> arrayList = new ArrayList<>();
+        dbOpenHelper = new DBOpenHelper(context);
+        SQLiteDatabase database = dbOpenHelper.getReadableDatabase();
+        Cursor cursor = dbOpenHelper.read_all_events(database);
+        while (cursor.moveToNext()) {
+            Events event = dbOpenHelper.getEventFromCursor(cursor);
+            arrayList.add(event);
+        }
+        cursor.close();
+        dbOpenHelper.close();
+        return arrayList;
+    }
+
+    private ArrayList<Events> collectEventsByDate(Date date) {
+        ArrayList<Events> arrayList = new ArrayList<>();
+        dbOpenHelper = new DBOpenHelper(context);
+        SQLiteDatabase database = dbOpenHelper.getReadableDatabase();
+        Cursor cursor = dbOpenHelper.ReadEventperDate(date, database);
+        while (cursor.moveToNext()) {
+            Events event = dbOpenHelper.getEventFromCursor(cursor);
+            arrayList.add(event);
+        }
+        cursor.close();
+        dbOpenHelper.close();
+        return arrayList;
+    }
+
+    private void initializeLayout() {
+        Log.e(TAG, TAG);
+        LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View view = layoutInflater.inflate(R.layout.monthly_calendar_layout, this);
+        week1 = view.findViewById(R.id.CUSTOM_CAL_week_no_1);
+        week2 = view.findViewById(R.id.CUSTOM_CAL_week_no_2);
+        week3 = view.findViewById(R.id.CUSTOM_CAL_week_no_3);
+        week4 = view.findViewById(R.id.CUSTOM_CAL_week_no_4);
+        week5 = view.findViewById(R.id.CUSTOM_CAL_week_no_5);
+        week6 = view.findViewById(R.id.CUSTOM_CAL_week_no_6);
+        weeks.add(week1);
+        weeks.add(week2);
+        weeks.add(week3);
+        weeks.add(week4);
+        weeks.add(week5);
+        weeks.add(week6);
+        next_button = view.findViewById(R.id.nextBtn);
+        previous_button = view.findViewById(R.id.previousBtn);
+        current_date_year = view.findViewById(R.id.current_date_year);
+        current_date_month = view.findViewById(R.id.current_date_month);
+        gridView = view.findViewById(R.id.monthly_grid);
         previous_button.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -87,195 +212,187 @@ public class CustomCalendarView extends LinearLayout {
             @SuppressLint("ResourceType")
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setCancelable(true);
-                final View add_view = LayoutInflater.from(parent.getContext()).inflate(R.layout.add_new_event, null);
-                final EditText event_name = add_view.findViewById(R.id.add_event_name);
-                final EditText event_descripton = add_view.findViewById(R.id.add_event_desc);
-                final EditText event_location = add_view.findViewById(R.id.location_text);
-                final LinearLayout interval_layout = add_view.findViewById(R.id.interval_layout);
-                final TextView start_event_time = add_view.findViewById(R.id.event_start_time);
-                final TextView end_event_time = add_view.findViewById(R.id.event_end_time);
-                final EditText times = add_view.findViewById(R.id.get_times);
-                final RadioGroup radio_interval_type = add_view.findViewById(R.id.interval_type);
-                final EditText interval_value = add_view.findViewById(R.id.interval_value);
-                final TextView interval_value_text = add_view.findViewById(R.id.interval_type_text);
-                ImageButton set_start_time = add_view.findViewById(R.id.set_event_start_time);
-                ImageButton set_end_time = add_view.findViewById(R.id.set_event_end_time);
-                final Spinner spinner = add_view.findViewById(R.id.spinner1);
-                // Create an ArrayAdapter using the string array and a default spinner layout
-                ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
-                        R.array.event_types_spinner, android.R.layout.simple_spinner_item);
-                // Specify the layout to use when the list of choices appears
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                // Apply the adapter to the spinner
-                spinner.setAdapter(adapter);
-                Button add_event = add_view.findViewById(R.id.add_event);
-                radio_interval_type.check(1);
-                interval_layout.setVisibility(View.GONE);
-                radio_interval_type.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(RadioGroup group, int checkedId) {
-                        checkedId %=6;
-                        Toast.makeText(context,"Çocuk"+checkedId , Toast.LENGTH_SHORT).show();
-                        if (checkedId == 1 || checkedId==0) {
-                            interval_layout.setVisibility(View.GONE);
-                        } else {
-                            interval_layout.setVisibility(View.VISIBLE);
-                            RadioButton r = (RadioButton) radio_interval_type.getChildAt(checkedId-1);
+                Intent new_inten = new Intent(context, Event_Main_Activity.class);
+                new_inten.putExtra("selected_date", dates.get(position));
+                Activity activity = (Activity) context;
+                activity.startActivityForResult(new_inten, 212);
 
-                            interval_value_text.setText(r.getText().toString());
-                        }
-                    }
-                });
-                radio_interval_type.check(1);
-                set_start_time.setOnClickListener(new OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Toast.makeText(context,"Saat seçilecek", Toast.LENGTH_SHORT).show();
-                        Calendar calendar = Calendar.getInstance();
-                        int hours = calendar.get(Calendar.HOUR_OF_DAY);
-                        int minutes = calendar.get(Calendar.MINUTE);
-
-                        final int year = calendar.get(Calendar.YEAR);
-                        final int month = calendar.get(Calendar.MONTH);
-                        final int day = calendar.get(Calendar.DAY_OF_MONTH);
-
-                        TimePickerDialog timePickerDialog = new TimePickerDialog(add_view.getContext(), R.style.Theme_AppCompat_DayNight_Dialog
-                                , new TimePickerDialog.OnTimeSetListener() {
-                            @Override
-                            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                                Calendar c = Calendar.getInstance();
-                                c.set(Calendar.YEAR, year);
-                                c.set(Calendar.DAY_OF_MONTH, day);
-                                c.set(Calendar.MONTH, month);
-                                c.set(Calendar.HOUR_OF_DAY, hourOfDay);
-                                c.set(Calendar.MINUTE, minute);
-                                c.setTimeZone(TimeZone.getDefault());
-                                SimpleDateFormat hformate = new SimpleDateFormat("K:mm a", Locale.ENGLISH);
-                                String event_time = hformate.format(c.getTime());
-                                start_event_time.setText(event_time);
-                            }
-                        }, hours, minutes, false);
-                        timePickerDialog.show();
-                    }
-                });
-                set_end_time.setOnClickListener(new OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        Calendar calendar = Calendar.getInstance();
-                        int hours = calendar.get(Calendar.HOUR_OF_DAY);
-                        int minutes = calendar.get(Calendar.MINUTE);
-                        TimePickerDialog timePickerDialog = new TimePickerDialog(add_view.getContext(), R.style.Theme_AppCompat_DayNight_Dialog
-                                , new TimePickerDialog.OnTimeSetListener() {
-                            @Override
-                            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                                Calendar c = Calendar.getInstance();
-                                c.set(Calendar.HOUR_OF_DAY, hourOfDay);
-                                c.set(Calendar.MINUTE, minute);
-                                c.setTimeZone(TimeZone.getDefault());
-                                SimpleDateFormat hformate = new SimpleDateFormat("K:mm a", Locale.ENGLISH);
-                                String event_time = hformate.format(c.getTime());
-                                end_event_time.setText(event_time);
-                            }
-                        }, hours, minutes, false);
-                        timePickerDialog.show();
-                    }
-                });
-                add_event.setOnClickListener(new OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        //TODO END DATE SORUNUNU ÇÖZ
-                        //String[] end_dates = end_event_time.getText().toString().split("-");
-
-                            try {
-                                int child_id = radio_interval_type.getCheckedRadioButtonId();
-                                Log.d("SAD" , String.valueOf(child_id));
-                                Double interval = 0.0;
-
-                                String start_date = eventDateFormat.format(dates.get(position));
-                                String start_month = monthFormat.format(dates.get(position));
-                                String start_year = yearFormat.format(dates.get(position));
-                                if (child_id != 1)
-                                    interval = calculate_interval(Double.valueOf(times.getText().toString()), Double.valueOf(interval_value.getText().toString()), child_id);
-                                Events event = new Events(event_name.getText().toString(),event_descripton.getText().toString(),event_location.getText().toString(),
-                                        interval, spinner.getSelectedItem().toString(),
-                                        start_event_time.getText().toString(), start_date, start_month, start_year,
-                                        start_event_time.getText().toString(), start_date, start_month, start_year,
-                                        false,-1);
-                                save_event_to_db(event);
-                                set_up_calendar();
-                                alertDialog.dismiss();
-
-                                //radio_interval_type.clearCheck();
-                            }catch (Exception e){
-                                e.printStackTrace();
-                                Toast.makeText(context,e.getMessage(),Toast.LENGTH_SHORT).show();
-                            }
-                    }
-                });
-                builder.setView(add_view);
-                alertDialog = builder.create();
-                alertDialog.show();
             }
         });
         gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-                                            @Override
-                                            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                                                String date  = eventDateFormat.format(dates.get(position));
-                                                AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                                                builder.setCancelable(true);
-                                                View showView = LayoutInflater.from(parent.getContext()).inflate(R.layout.show_events, null);
-                                                RecyclerView recyclerView = showView.findViewById(R.id.events_RV);
-                                                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(showView.getContext());
-                                                recyclerView.setLayoutManager(layoutManager);
-                                                recyclerView.setHasFixedSize(true);
-                                                EventsRecyclerAdapter eventsRecyclerAdapter = new EventsRecyclerAdapter(showView.getContext(),collectEventsByDate(date));
-                                                recyclerView.setAdapter(eventsRecyclerAdapter);
-                                                eventsRecyclerAdapter.notifyDataSetChanged();
+                                                @Override
+                                                public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                                                    String date = eventDateFormat.format(dates.get(position));
+                                                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                                                    builder.setCancelable(true);
+                                                    View showView = LayoutInflater.from(parent.getContext()).inflate(R.layout.show_events, null);
+                                                    RecyclerView recyclerView = showView.findViewById(R.id.events_RV);
+                                                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(showView.getContext());
+                                                    recyclerView.setLayoutManager(layoutManager);
 
-                                                builder.setView(showView);
-                                                alertDialog = builder.create();
-                                                alertDialog.show();
+                                                    recyclerView.setHasFixedSize(true);
+                                                    String[] infos = date.split("-");
+                                                    EventsRecyclerAdapter eventsRecyclerAdapter = new EventsRecyclerAdapter(showView.getContext(), collectEventsByDate(dates.get(position)));
+                                                    recyclerView.setAdapter(eventsRecyclerAdapter);
+                                                    eventsRecyclerAdapter.notifyDataSetChanged();
 
-                                                alertDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                                                    @Override
-                                                    public void onCancel(DialogInterface dialog) {
-                                                        set_up_calendar();
-                                                    }
-                                                });
-                                                return true;
+                                                    builder.setView(showView);
+                                                    alertDialog = builder.create();
+                                                    alertDialog.show();
+
+                                                    alertDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                                                        @Override
+                                                        public void onCancel(DialogInterface dialog) {
+                                                            set_up_calendar();
+                                                        }
+                                                    });
+                                                    return true;
+                                                }
                                             }
-                                        }
         );
+        current_date_year.setOnLongClickListener(new OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                String date = current_date_year.getText().toString();
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setCancelable(true);
+                View showView = LayoutInflater.from(context).inflate(R.layout.show_events, null);
+                RecyclerView recyclerView = showView.findViewById(R.id.events_RV);
+                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(showView.getContext());
+                recyclerView.setLayoutManager(layoutManager);
+
+                recyclerView.setHasFixedSize(true);
+                EventsRecyclerAdapter eventsRecyclerAdapter = null;
+                Date year = null;
+                try {
+                    year = final_only_date_format.parse(date + "-01-01");
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                eventsRecyclerAdapter = new EventsRecyclerAdapter(showView.getContext(), collectEventsByYear(year));
+
+                recyclerView.setAdapter(eventsRecyclerAdapter);
+                eventsRecyclerAdapter.notifyDataSetChanged();
+
+                builder.setView(showView);
+                alertDialog = builder.create();
+                alertDialog.show();
+
+                alertDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        set_up_calendar();
+                    }
+                });
+                return true;
+            }
+        });
+        current_date_month.setOnLongClickListener(new OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                String years = current_date_year.getText().toString();
+                int month = get_months().indexOf(current_date_month.getText().toString());
+                String months = "";
+                if (month < 10) months += "0";
+                months += month;
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setCancelable(true);
+                View showView = LayoutInflater.from(context).inflate(R.layout.show_events, null);
+                RecyclerView recyclerView = showView.findViewById(R.id.events_RV);
+                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(showView.getContext());
+                recyclerView.setLayoutManager(layoutManager);
+
+                recyclerView.setHasFixedSize(true);
+                EventsRecyclerAdapter eventsRecyclerAdapter = null;
+                Date year = null;
+                try {
+                    year = final_only_date_format.parse(years + "-" + months + "-01");
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                eventsRecyclerAdapter = new EventsRecyclerAdapter(showView.getContext(), collectEventsByYear(year));
+
+                recyclerView.setAdapter(eventsRecyclerAdapter);
+                eventsRecyclerAdapter.notifyDataSetChanged();
+
+                builder.setView(showView);
+                alertDialog = builder.create();
+                alertDialog.show();
+
+                alertDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        set_up_calendar();
+                    }
+                });
+                return true;
+            }
+        });
+        for (final TextView week : weeks)
+            week.setOnLongClickListener(new OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    show_all_events_per_week(week.getText().toString());
+                    return true;
+                }
+            });
+
+
     }
-    private ArrayList<Events> collectEventsByDate(String date){
+
+    private void show_all_events_per_week(String week_no) {
+        String year = current_date_year.getText().toString();
+
+        Calendar cal = Calendar.getInstance();
+
+        cal.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY);
+        cal.set(Calendar.YEAR, Integer.parseInt(year));
+        cal.set(Calendar.WEEK_OF_YEAR, Integer.parseInt(week_no));
+        int saturday = cal.get(Calendar.DAY_OF_MONTH);
+        int saturday_month = cal.get(Calendar.MONTH) + 1;
+        int year_end = cal.get(Calendar.YEAR);
+        Date start = new Date();
+        start.setTime(cal.getTimeInMillis());
+        cal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+        cal.set(Calendar.YEAR, Integer.parseInt(year));
+        cal.set(Calendar.WEEK_OF_YEAR, Integer.parseInt(week_no));
+        Date end = new Date();
+        end.setTime(cal.getTimeInMillis());
+        int sunday = cal.get(Calendar.DAY_OF_MONTH);
+        int sunday_month = cal.get(Calendar.MONTH) + 1;
+        int year_start = cal.get(Calendar.YEAR);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setCancelable(true);
+        View showView = LayoutInflater.from(context).inflate(R.layout.show_events, null);
+        RecyclerView recyclerView = showView.findViewById(R.id.events_RV);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(showView.getContext());
+        recyclerView.setLayoutManager(layoutManager);
+
+        recyclerView.setHasFixedSize(true);
+        EventsRecyclerAdapter eventsRecyclerAdapter = null;
+        eventsRecyclerAdapter = new EventsRecyclerAdapter(showView.getContext(), collectEventsperWeek(start, end));
+        recyclerView.setAdapter(eventsRecyclerAdapter);
+        eventsRecyclerAdapter.notifyDataSetChanged();
+        builder.setView(showView);
+        alertDialog = builder.create();
+        alertDialog.show();
+        alertDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                set_up_calendar();
+            }
+        });
+    }
+
+    private ArrayList<Events> collectEventsperWeek(Date start_date, Date end_date) {
         ArrayList<Events> arrayList = new ArrayList<>();
         dbOpenHelper = new DBOpenHelper(context);
         SQLiteDatabase database = dbOpenHelper.getReadableDatabase();
-        Cursor cursor = dbOpenHelper.ReadEventperDate(date,database);
+        Cursor cursor = dbOpenHelper.ReadEventperWeek(start_date, end_date, database);
         while (cursor.moveToNext()) {
-            int EVENT_ID = cursor.getInt(cursor.getColumnIndex("ID"));
-            String EVENT_NAME = cursor.getString(cursor.getColumnIndex(DBStructure.EVENT_NAME));
-            int EVENT_PARENT_ID = cursor.getInt(cursor.getColumnIndex(DBStructure.EVENT_PARENT_ID));
-            String EVENT_DESCRIPTION = cursor.getString(cursor.getColumnIndex(DBStructure.EVENT_DESCRIPTION));
-            String LOCATION = cursor.getString(cursor.getColumnIndex(DBStructure.EVENT_LOCATION));
-            Double FREQUENCY = cursor.getDouble(cursor.getColumnIndex(DBStructure.EVENT_FREQUENCY));
-            String EVENT_TYPE = cursor.getString(cursor.getColumnIndex(DBStructure.EVENT_TYPE));
-            String START_TIME = cursor.getString(cursor.getColumnIndex(DBStructure.EVENT_START_TIME));
-            String START_DATE = cursor.getString(cursor.getColumnIndex(DBStructure.EVENT_START_DATE));
-            String START_MONTH = cursor.getString(cursor.getColumnIndex(DBStructure.EVENT_START_MONTH));
-            String START_YEAR = cursor.getString(cursor.getColumnIndex(DBStructure.EVENT_START_YEAR));
-            String END_TIME = cursor.getString(cursor.getColumnIndex(DBStructure.EVENT_END_TIME));
-            String END_DATE = cursor.getString(cursor.getColumnIndex(DBStructure.EVENT_END_DATE));
-            String END_MONTH = cursor.getString(cursor.getColumnIndex(DBStructure.EVENT_END_MONTH));
-            String END_YEAR = cursor.getString(cursor.getColumnIndex(DBStructure.EVENT_END_YEAR));
-            int done = cursor.getInt(cursor.getColumnIndex(DBStructure.EVENT_NAME));
-            boolean DONE = false;
-            if (done == 1 ) DONE= true;
-            Events events = new Events(EVENT_ID,EVENT_NAME,EVENT_DESCRIPTION,LOCATION,FREQUENCY,EVENT_TYPE,START_TIME,START_DATE, START_MONTH,START_YEAR,END_TIME,END_DATE,END_MONTH,END_YEAR,DONE,EVENT_PARENT_ID);
+            Events events = dbOpenHelper.getEventFromCursor(cursor);
             arrayList.add(events);
         }
         cursor.close();
@@ -284,94 +401,57 @@ public class CustomCalendarView extends LinearLayout {
         return arrayList;
     }
 
-    private void initializeLayout() {
-        Log.e("AS", "ASDAS");
-        LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = layoutInflater.inflate(R.layout.monthly_calendar_layout, this);
-        next_button = view.findViewById(R.id.nextBtn);
-        previous_button = view.findViewById(R.id.previousBtn);
-        current_date = view.findViewById(R.id.current_date);
-        gridView = view.findViewById(R.id.monthly_grid);
-    }
-
-    private void set_up_calendar() {
-        String currwntDate = dateFormat.format(calendar.getTime());
-        current_date.setText(currwntDate);
-        dates.clear();
-        Calendar month_Calendar = (Calendar) calendar.clone();
-        month_Calendar.set(Calendar.DAY_OF_MONTH, 1);
-        int FirstDayOfMont = month_Calendar.get(Calendar.DAY_OF_WEEK) - 1;
-        month_Calendar.add(Calendar.DAY_OF_MONTH, -FirstDayOfMont);
-        collect_events_per_month(monthFormat.format(calendar.getTime()) , yearFormat.format(calendar.getTime()));
-        while (dates.size() < MAX_CALENDAR_DAY) {
-            dates.add(month_Calendar.getTime());
-            month_Calendar.add(Calendar.DAY_OF_MONTH, 1);
-        }
-        gridAdapter = new GridAdapter(context, dates, calendar, eventsList);
-        gridView.setAdapter(gridAdapter);
-
-    }
-
-    private Double calculate_interval(Double times, Double inteval, int child_id) {
-        double val = 0.00;
-        switch (child_id) {
-            case 2: {
-                val = 1;
-                break;
-            }
-            case 3: {
-                val = 7.0;
-                break;
-            }
-            case 4: {
-                val = 30;
-                break;
-            }
-            case 5: {
-                val = 365;
-                break;
-            }
-        }
-        return inteval * val * 24.0 * 60 * 60 * 1000.0 / times;
-    }
-
-    private void save_event_to_db(Events event) {
-        dbOpenHelper = new DBOpenHelper(context);
-        SQLiteDatabase database = dbOpenHelper.getWritableDatabase();
-        dbOpenHelper.save_Event(event, database);
-        dbOpenHelper.close();
-        Toast.makeText(context, "Event Saved", Toast.LENGTH_SHORT).show();
-    }
-
-    private void collect_events_per_month(String month, String year) {
-        eventsList.clear();
+    private ArrayList<Events> collectEventsByYear(Date date) {
+        ArrayList<Events> arrayList = new ArrayList<>();
         dbOpenHelper = new DBOpenHelper(context);
         SQLiteDatabase database = dbOpenHelper.getReadableDatabase();
-        Cursor cursor = dbOpenHelper.ReadEventperMonth(month, year, database);
+        Cursor cursor = dbOpenHelper.ReadEventperYear(date, database);
         while (cursor.moveToNext()) {
-            int EVENT_ID = cursor.getInt(cursor.getColumnIndex("ID"));
-            String EVENT_NAME = cursor.getString(cursor.getColumnIndex(DBStructure.EVENT_NAME));
-            int EVENT_PARENT_ID = cursor.getInt(cursor.getColumnIndex(DBStructure.EVENT_PARENT_ID));
-            String EVENT_DESCRIPTION = cursor.getString(cursor.getColumnIndex(DBStructure.EVENT_DESCRIPTION));
-            String LOCATION = cursor.getString(cursor.getColumnIndex(DBStructure.EVENT_LOCATION));
-            Double FREQUENCY = cursor.getDouble(cursor.getColumnIndex(DBStructure.EVENT_FREQUENCY));
-            String EVENT_TYPE = cursor.getString(cursor.getColumnIndex(DBStructure.EVENT_TYPE));
-            String START_TIME = cursor.getString(cursor.getColumnIndex(DBStructure.EVENT_START_TIME));
-            String START_DATE = cursor.getString(cursor.getColumnIndex(DBStructure.EVENT_START_DATE));
-            String START_MONTH = cursor.getString(cursor.getColumnIndex(DBStructure.EVENT_START_MONTH));
-            String START_YEAR = cursor.getString(cursor.getColumnIndex(DBStructure.EVENT_START_YEAR));
-            String END_TIME = cursor.getString(cursor.getColumnIndex(DBStructure.EVENT_END_TIME));
-            String END_DATE = cursor.getString(cursor.getColumnIndex(DBStructure.EVENT_END_DATE));
-            String END_MONTH = cursor.getString(cursor.getColumnIndex(DBStructure.EVENT_END_MONTH));
-            String END_YEAR = cursor.getString(cursor.getColumnIndex(DBStructure.EVENT_END_YEAR));
-            int done = cursor.getInt(cursor.getColumnIndex(DBStructure.EVENT_NAME));
-            boolean DONE = false;
-            if (done == 1 ) DONE= true;
-            Events events = new Events(EVENT_ID,EVENT_NAME,EVENT_DESCRIPTION,LOCATION,FREQUENCY,EVENT_TYPE,START_TIME,START_DATE, START_MONTH,START_YEAR,END_TIME,END_DATE,END_MONTH,END_YEAR,DONE,EVENT_PARENT_ID);
-            eventsList.add(events);
+            Events events = dbOpenHelper.getEventFromCursor(cursor);
+            arrayList.add(events);
         }
         cursor.close();
         dbOpenHelper.close();
+
+        return arrayList;
+    }
+
+    private ArrayList<Events> collects_Events_by_spesific_month(Date date) {
+        ArrayList<Events> events = new ArrayList<>();
+        dbOpenHelper = new DBOpenHelper(context);
+        SQLiteDatabase database = dbOpenHelper.getReadableDatabase();
+        Cursor cursor = dbOpenHelper.ReadEventperMonth(date, database);
+        while (cursor.moveToNext()) {
+            Events event = dbOpenHelper.getEventFromCursor(cursor);
+            events.add(event);
+        }
+        cursor.close();
+        dbOpenHelper.close();
+        return events;
+    }
+
+    private ArrayList<String> get_months() {
+        ArrayList<String> months = new ArrayList<String>();
+        months.add("January");
+        months.add("February");
+        months.add("March");
+        months.add("April");
+        months.add("May");
+        months.add("June");
+        months.add("July");
+        months.add("August");
+        months.add("September");
+        months.add("October");
+        months.add("November");
+        months.add("December");
+        return months;
+    }
+
+    private void cancel_alarm(int request_code) {
+        Intent intent = new Intent(context.getApplicationContext(), Alarm_Receiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, request_code, intent, PendingIntent.FLAG_ONE_SHOT);
+        AlarmManager alarmManager = (AlarmManager) context.getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+        alarmManager.cancel(pendingIntent);
     }
 
 }

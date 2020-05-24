@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -18,17 +18,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:textColor="@android:color/holo_blue_dark"
-                    android:id="@+id/single_event_name"
+                    android:id="@+id/SINGLE_EVENT_name"
                     android:textSize="40dp"
                     android:text="Event" />
-
-
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -44,7 +41,7 @@
                             android:layout_height="wrap_content"
                             android:gravity="center"
                             android:textColor="@android:color/holo_purple"
-                            android:id="@+id/single_event_start_date"
+                            android:id="@+id/SINGLE_EVENT_start_date"
                             android:textStyle="bold"
                             android:text="Date"
                             android:textSize="15dp" />
@@ -55,7 +52,7 @@
                             android:layout_height="wrap_content"
                             android:gravity="center"
                             android:textColor="@android:color/holo_green_dark"
-                            android:id="@+id/single_start_event_time"
+                            android:id="@+id/SINGLE_EVENT_start_time"
                             android:textSize="20sp"
                             android:text="" />
 
@@ -71,7 +68,7 @@
                             android:layout_height="wrap_content"
                             android:gravity="center"
                             android:textColor="@android:color/holo_purple"
-                            android:id="@+id/single_event_end_date"
+                            android:id="@+id/SINGLE_EVENT_end_date"
                             android:textStyle="bold"
                             android:text="Date"
                             android:textSize="15dp" />
@@ -81,14 +78,10 @@
                             android:layout_height="wrap_content"
                             android:gravity="center"
                             android:textColor="@android:color/holo_green_dark"
-                            android:id="@+id/single_end_event_time"
+                            android:id="@+id/SINGLE_EVENT_end_time"
                             android:textSize="20dp"
                             android:text="" />
-
-
                     </LinearLayout>
-
-
 
                 </LinearLayout>
                 <LinearLayout
@@ -102,7 +95,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:textColor="@android:color/holo_purple"
-                        android:id="@+id/single_event_type"
+                        android:id="@+id/SINGLE_EVENT_type"
                         android:textSize="20dp"
                         android:text="Event" />
 
@@ -112,13 +105,11 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:textColor="@android:color/holo_purple"
-                        android:id="@+id/single_event_interval"
+                        android:id="@+id/SINGLE_EVENT_interval"
                         android:textSize="20dp"
                         android:text="@string/interval_type" />
 
                 </LinearLayout>
-
-
 
             </LinearLayout>
             <LinearLayout
@@ -131,23 +122,19 @@
 
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:id="@+id/edit_event"
+                    android:id="@+id/SINGLE_EVENT_edit_IMAGE_BUTTON"
                     android:background="@mipmap/edit"
                     android:layout_margin="10dp" />
                 <ImageButton
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:id="@+id/delete_event"
+                    android:id="@+id/SINGLE_EVENT_delete_IMAGE_BUTTON"
                     android:background="@mipmap/delete"
                     android:layout_margin="10dp" />
 
 
             </LinearLayout>
         </LinearLayout>
-
-
-
-
 
     </androidx.cardview.widget.CardView>
 </LinearLayout>

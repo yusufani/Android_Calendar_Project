@@ -7,20 +7,21 @@
 
 
     Days
-    <string name="monday">Monday</string>
-    <string name="tuesday">Tuesday</string>
-    <string name="wednesday">Wednesday</string>
-    <string name="thursday">Thursday</string>
-    <string name="friday">Friday</string>
-    <string name="saturday">Saturday</string>
-    <string name="sunday">Sunday</string>
+    <string name="sunday">Sun</string>
+    <string name="monday">Mon</string>
+    <string name="tuesday">Tues</string>
+    <string name="wednesday">Wednes</string>
+    <string name="thursday">Thurs</string>
+    <string name="friday">Fri</string>
+    <string name="saturday">Satur</string>
+
 
     Add Event
     <string name="add_event_name">Event Name</string>
     <string name="add_event_desc">Event Description</string>
     <string name="add_event_button">Add Event</string>
-    <string name="start_date_not_set">Start Time not set</string>
-    <string name="end_date_not_set">End Date not set</string>
+    <string name="start_time_not_set">Click clock icon for setting time </string>
+    <string name="start_date_not_set">Click calendar icon for setting date </string>
     <string name="add_location">Find Location</string>
     <string name="add_event_loc">Location Info</string>
     <string name="days">Days</string>
@@ -28,7 +29,6 @@
     <string name="months">Months</string>
     <string name="years">Years</string>
     <string name="no_interval">Close</string>
-    <string name="times">times in </string>
     <string name="interval_type">Interval Type</string>
     <string name="add_reminder_button">Add Reminder</string>
 
@@ -42,14 +42,73 @@
 
     Reminder Mp3s
     <string-array name="reminder_mp3s">
-        <item>Task</item>
-        <item>Note</item>
-        <item>Birthday</item>
-        <item>Meeting</item>
+        <item>alien_alarmdrum</item>
+        <item>harley_davidson</item>
+        <item>rooster</item>
+        <item>school_bell</item>
+        <item>slot_machine</item>
+        <item>warning_siren</item>
     </string-array>
 
 
     Add Reminder
     <string name="start_time">Reminder Time not set</string>
+    <string name="show_not">Show Notification</string>
+    <string name="show_ui">Show Alert UI</string>
+    <string name="vibration">Use Vibration</string>
+    <string name="play_ring">Play RingTone</string>
+    <string name="title_activity_settings">Settings</string>
+
+    Settings
+
+
+    <string name="dark_mode">Dark Mode : </string>
+    <string name="Default_Ringtone">Default Ringtone</string>
+    <string name="Default_Reminder_Time">Default Reminder Time</string>
+    <string name="Default_Reminder_Frequency">Default Reminder Frequency :</string>
+    <string name="save">Save Settings</string>
+    <string name="select_start_time">Select Event Start Time</string>
+    <string name="select_end_time">Select Event End Time</string>
+    <string name="select_end_date">Select Event End Date</string>
+    <string name="every">Every</string>
+
+
+    <string-array name="default_Re_time_Array">
+        <item>0</item>
+        <item>5</item>
+        <item>10</item>
+        <item>15</item>
+        <item>20</item>
+        <item>25</item>
+        <item>30</item>
+        <item>35</item>
+        <item>40</item>
+        <item>45</item>
+        <item>50</item>
+    </string-array>
+    <string-array name="default_Re_freq_Array">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+
+    <string-array name="interval_types">
+        <item>Close</item>
+        <item>Hours</item>
+        <item>Days</item>
+        <item>Weeks</item>
+        <item>Months</item>
+        <item>Years</item>
+    </string-array>
+
+    <string name="title_activity_alarm_dialog">alarm_dialog</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="default_event_max_interval">Default Event Max Interval:</string>
+    <string name="google_maps_key">AIzaSyAhiAD3b9zrYWv-DEQpgROXtFkKcPzHW7Q</string>
+    <string name="get_selected_location">Get Selected Location</string>
+    <string name="show_all_events">Show All Events</string>
 
 </resources>

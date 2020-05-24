@@ -7,6 +7,7 @@
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
        android:orientation="vertical">
+
        <TextView
            android:padding="20dp"
            android:background="#1B0303"
@@ -16,39 +17,136 @@
            android:textSize="50sp"
            android:textColor="@android:color/white"
            android:textStyle="bold"
-           android:text="REMINDER INFORMATIONS"
+           android:text="REMINDER INFORMATIONS" />
 
     <LinearLayout
         android:layout_margin="20dp"
         android:layout_width="match_parent"
         android:orientation="horizontal"
         android:layout_height="wrap_content">
-
-        <ImageButton
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:background="@mipmap/time_icon"
-            android:layout_margin="10dp"
-            android:id="@+id/set_reminder_time"
-            android:contentDescription="TODO" />
-        <TextView
+<LinearLayout
+    android:layout_weight="1"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <ImageButton
+        android:layout_gravity="center"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@mipmap/time_icon"
+        android:layout_margin="10dp"
+        android:id="@+id/set_reminder_time"
+        android:contentDescription="TODO" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/start_time_not_set"
+        android:gravity="center"
+        android:textSize="30sp"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        android:id="@+id/reminder_start_time"
+        android:layout_margin="10dp"/>
+</LinearLayout>
+        <LinearLayout
+            android:layout_weight="1"
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/start_time"
-            android:gravity="center"
-            android:textSize="30sp"
-            android:textColor="@android:color/white"
-            android:textStyle="bold"
-            android:id="@+id/event_start_time"
-            android:layout_margin="10dp">
+            android:layout_height="wrap_content">
+            <ImageButton
+                android:layout_gravity="center"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@mipmap/calendar"
+                android:layout_margin="10dp"
+                android:id="@+id/set_reminder_date"
+                android:contentDescription="TODO" />
 
-        </TextView>
-
-
-
-
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/start_date_not_set"
+                android:gravity="center"
+                android:textSize="30sp"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                android:id="@+id/reminder_start_date"
+                android:layout_margin="10dp" />
+        </LinearLayout>
 
     </LinearLayout>
+
+
+       <CheckBox
+           android:id="@+id/reminder_show_not"
+           android:layout_margin="10dp"
+           android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:buttonTint="#C90000"
+       android:color="@android:color/white"
+       android:gravity="center"
+       android:text="@string/show_not"
+       android:textColor="@android:color/white"
+       android:textSize="30sp"
+       android:textStyle="bold">
+       </CheckBox>
+       <CheckBox
+           android:id="@+id/reminder_show_ui"
+           android:layout_margin="10dp"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:buttonTint="#C90000"
+           android:color="@android:color/white"
+           android:gravity="center"
+           android:text="@string/show_ui"
+           android:textColor="@android:color/white"
+           android:textSize="30sp"
+           android:textStyle="bold">
+       </CheckBox>
+       <CheckBox
+           android:id="@+id/reminder_use_vib"
+           android:layout_margin="10dp"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:buttonTint="#C90000"
+           android:color="@android:color/white"
+           android:gravity="center"
+           android:text="@string/vibration"
+           android:textColor="@android:color/white"
+           android:textSize="30sp"
+           android:textStyle="bold">
+       </CheckBox>
+       <CheckBox
+           android:id="@+id/reminder_use_mp3"
+           android:layout_margin="10dp"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:buttonTint="#C90000"
+           android:color="@android:color/white"
+           android:gravity="center"
+           android:text="@string/play_ring"
+           android:textColor="@android:color/white"
+           android:textSize="30sp"
+           android:textStyle="bold">
+       </CheckBox>
+       <Spinner
+           android:visibility="gone"
+           android:id="@+id/spinner_reminder_mp3s"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:backgroundTint="#00FF0A0A"
+           android:backgroundTintMode="add" />
+       <Button
+           android:background="@drawable/button_back"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:text="@string/add_event_button"
+           android:layout_gravity="center"
+           android:layout_margin="10dp"
+           android:textAllCaps="false"
+           android:textStyle="bold"
+           android:textColor="@android:color/black"
+           android:id="@+id/add_reminder" />
    </LinearLayout>
 
 </ScrollView>

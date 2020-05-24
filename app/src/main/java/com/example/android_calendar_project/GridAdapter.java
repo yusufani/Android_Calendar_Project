@@ -10,16 +10,11 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.RecyclerView;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
-import java.util.concurrent.TimeoutException;
 
 public class GridAdapter extends ArrayAdapter {
     List<Date> dates;
@@ -78,7 +73,8 @@ public class GridAdapter extends ArrayAdapter {
         Calendar eventCalender = Calendar.getInstance();
         ArrayList<String> arrayList = new ArrayList<>();
         for (int i= 0 ; i< events.size() ; i++){
-            eventCalender.setTime(converStringToDate(events.get(i).getSTART_DATE()));
+            Events e = events.get(i);
+            eventCalender.setTime(e.getSTART_DATE());
             if(DayNo == eventCalender.get(Calendar.DAY_OF_MONTH) && displayMonth == eventCalender.get(Calendar.MONTH)+1  &&
             displayYear == eventCalender.get(Calendar.YEAR)){
                 arrayList.add(events.get(i).getEVENT_NAME());
@@ -87,15 +83,5 @@ public class GridAdapter extends ArrayAdapter {
         }
         return view;
     }
-    private Date converStringToDate(String evenDate){
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd" , Locale.ENGLISH) ;
-        Date date = null;
-        try{
-            date = format.parse(evenDate);
 
-        }catch (ParseException e ){
-            e.printStackTrace();
-        }
-        return date;
-    }
 }

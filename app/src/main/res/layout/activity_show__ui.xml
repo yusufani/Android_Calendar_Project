@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@mipmap/mountain"
+    >
+
+    <TextView
+        android:id="@+id/SHOW_UI_info"
+        android:layout_gravity="center"
+        android:layout_weight="4"
+        android:layout_margin="40dp"
+        android:textColor="@android:color/white"
+        android:textSize="20dp"
+        android:text="Event ile ilgili bilgiler"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </TextView>
+    <LinearLayout
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/SHOW_UI_close_button"
+            android:layout_margin="20dp"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:background="@drawable/button_circle_close">
+        </Button>
+        <Button
+            android:id="@+id/SHOW_UI_go_BUTTON"
+            android:layout_margin="20dp"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:background="@drawable/button_go_event">
+        </Button>
+
+        <Button
+            android:id="@+id/SHOW_UI_ok_BUTTON"
+            android:layout_margin="20dp"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:background="@drawable/button_circle_ok">
+        </Button>
+    </LinearLayout>
+</LinearLayout>

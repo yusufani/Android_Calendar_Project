@@ -1,16 +1,19 @@
 package com.example.android_calendar_project;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-
-import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class MainActivity extends AppCompatActivity {
     CustomCalendarView customCalendarView;
@@ -22,14 +25,6 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         customCalendarView= findViewById(R.id.custom_calendar_view);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
     }
 
     @Override
@@ -48,9 +43,47 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Toast.makeText(getApplicationContext(), "Settings Selected", Toast.LENGTH_SHORT).show();
+            Intent newIntent = new Intent(getApplicationContext(), Settings_Acticity.class);
+            startActivity(newIntent);
+            return true;
+        }else if ( id== R.id.action_show_all_events){
+            AlertDialog alertDialog;
+            Toast.makeText(getApplicationContext(), "Showing all events ", Toast.LENGTH_SHORT).show();
+            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+            builder.setCancelable(true);
+            View showView = LayoutInflater.from(MainActivity.this).inflate(R.layout.show_events, null);
+            RecyclerView recyclerView = showView.findViewById(R.id.events_RV);
+            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(showView.getContext());
+            recyclerView.setLayoutManager(layoutManager);
+            recyclerView.setHasFixedSize(true);
+            EventsRecyclerAdapter eventsRecyclerAdapter = new EventsRecyclerAdapter(showView.getContext(), CustomCalendarView.collectsAllevents());
+            recyclerView.setAdapter(eventsRecyclerAdapter);
+            eventsRecyclerAdapter.notifyDataSetChanged();
+
+            builder.setView(showView);
+            alertDialog = builder.create();
+            alertDialog.show();
+
+            alertDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                @Override
+                public void onCancel(DialogInterface dialog) {
+                    CustomCalendarView.set_up_calendar();
+                }
+            });
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_CANCELED) {
+            return;
+        }
+
     }
 }
