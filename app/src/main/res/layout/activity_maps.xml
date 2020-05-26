@@ -16,7 +16,7 @@
     <Button
         android:layout_weight="1"
         android:id="@+id/MAPS_get_loc_BUTTON"
-        android:textColor="@color/quantum_white_100"
+        android:textColor="@color/white"
         android:background="@drawable/button_back"
         android:layout_width="match_parent"
         android:text="@string/get_selected_location"

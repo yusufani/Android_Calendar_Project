@@ -1,13 +1,22 @@
 package com.example.android_calendar_project;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.DatePicker;
+import android.widget.ScrollView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,16 +24,48 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
+
+import java.util.Calendar;
+import java.util.Date;
+
 public class MainActivity extends AppCompatActivity {
+
     CustomCalendarView customCalendarView;
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        CustomCalendarView.set_theme(MainActivity.this);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         customCalendarView= findViewById(R.id.custom_calendar_view);
+        //ScrollView scrollView = findViewById(R.id.MAIN_SCROOL);
+        customCalendarView.setOnTouchListener(new Gesture_control(MainActivity.this) {
+            public void onSwipeTop() {
+                Toast.makeText(MainActivity.this, "Next Year", Toast.LENGTH_SHORT).show();
+                CustomCalendarView.calendar.add(Calendar.YEAR, 1);
+                CustomCalendarView.set_up_calendar();
+            }
+            public void onSwipeRight() {
+                Toast.makeText(MainActivity.this, "Next Month", Toast.LENGTH_SHORT).show();
+                CustomCalendarView.calendar.add(Calendar.MONTH, 1);
+                CustomCalendarView.set_up_calendar();
+            }
+            public void onSwipeLeft() {
+                Toast.makeText(MainActivity.this, "Previous Month", Toast.LENGTH_SHORT).show();
+                CustomCalendarView.calendar.add(Calendar.MONTH, -1);
+                CustomCalendarView.set_up_calendar();
+            }
+            public void onSwipeBottom() {
+                Toast.makeText(MainActivity.this, "Previous Year", Toast.LENGTH_SHORT).show();
+                CustomCalendarView.calendar.add(Calendar.YEAR, -1);
+                CustomCalendarView.set_up_calendar();
+            }
 
+        });
     }
 
     @Override
@@ -72,7 +113,13 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
             return true;
+        }else if (id== R.id.show_statistics){
+            Toast.makeText(getApplicationContext(), "Statistics Selected", Toast.LENGTH_SHORT).show();
+            Intent newIntent = new Intent(getApplicationContext(), Statistics_Activity.class);
+            startActivity(newIntent);
+            return true;
         }
+
 
         return super.onOptionsItemSelected(item);
     }

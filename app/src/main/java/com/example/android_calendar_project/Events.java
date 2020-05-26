@@ -7,20 +7,25 @@ import java.util.Date;
 
 public class Events implements Serializable {
     private int EVENT_ID;
-    private String EVENT_NAME;
+    private String EVENT_NAME , EVENT_COLOR;
     private String EVENT_DESCRIPTION = null;
     private String LOCATION = null;
-    private int INTERVAL;
+
+
+    private int INTERVAL_TYPE;
+    private int INTERVAL_VALUE;
     private String EVENT_TYPE;
     private Date START_DATE, END_DATE;
     private Boolean DONE;
     private int PARENT_EVENT_ID;
 
-    public Events(String EVENT_NAME, String EVENT_DESCRIPTION, String LOCATION, int INTERVAL, String EVENT_TYPE, Date START_DATE, Date END_DATE, Boolean DONE, int PARENT_EVENT_ID) {
+    public Events(String EVENT_NAME, String EVENT_DESCRIPTION, String LOCATION, int INTERVAL_TYPE, int INTERVAL_VALUE, String EVENT_TYPE,String EVENT_COLOR, Date START_DATE, Date END_DATE, Boolean DONE, int PARENT_EVENT_ID) {
         this.EVENT_NAME = EVENT_NAME;
+        this.EVENT_COLOR = EVENT_COLOR;
         this.EVENT_DESCRIPTION = EVENT_DESCRIPTION;
         this.LOCATION = LOCATION;
-        this.INTERVAL = INTERVAL;
+        this.INTERVAL_TYPE = INTERVAL_TYPE;
+        this.INTERVAL_VALUE = INTERVAL_VALUE;
         this.EVENT_TYPE = EVENT_TYPE;
         this.START_DATE = START_DATE;
         this.END_DATE = END_DATE;
@@ -28,18 +33,22 @@ public class Events implements Serializable {
         this.PARENT_EVENT_ID = PARENT_EVENT_ID;
     }
 
-    public Events(int EVENT_ID, String EVENT_NAME, String EVENT_DESCRIPTION, String LOCATION, int INTERVAL, String EVENT_TYPE, Date START_DATE, Date END_DATE, Boolean DONE, int PARENT_EVENT_ID) {
+    public Events(int EVENT_ID, String EVENT_NAME, String EVENT_COLOR, String EVENT_DESCRIPTION, String LOCATION, int INTERVAL_TYPE, int INTERVAL_VALUE, String EVENT_TYPE, Date START_DATE, Date END_DATE, Boolean DONE, int PARENT_EVENT_ID) {
         this.EVENT_ID = EVENT_ID;
         this.EVENT_NAME = EVENT_NAME;
+        this.EVENT_COLOR = EVENT_COLOR;
         this.EVENT_DESCRIPTION = EVENT_DESCRIPTION;
         this.LOCATION = LOCATION;
-        this.INTERVAL = INTERVAL;
+        this.INTERVAL_TYPE = INTERVAL_TYPE;
+        this.INTERVAL_VALUE = INTERVAL_VALUE;
         this.EVENT_TYPE = EVENT_TYPE;
         this.START_DATE = START_DATE;
         this.END_DATE = END_DATE;
         this.DONE = DONE;
         this.PARENT_EVENT_ID = PARENT_EVENT_ID;
     }
+
+
 
     public Events() {
 
@@ -49,10 +58,11 @@ public class Events implements Serializable {
         Events newUser = new Events();
         newUser.setEVENT_DESCRIPTION(other.getEVENT_DESCRIPTION());
         newUser.setLOCATION(other.getLOCATION());
-        newUser.setINTERVAL(other.getINTERVAL());
+        newUser.setINTERVAL_VALUE(other.getINTERVAL_VALUE());
+        newUser.setINTERVAL_TYPE(other.getINTERVAL_TYPE());
         newUser.setEVENT_NAME(other.getEVENT_NAME());
         newUser.setEVENT_TYPE(other.getEVENT_TYPE());
-
+        newUser.setEVENT_COLOR(other.getEVENT_COLOR());
         newUser.setSTART_DATE(other.getSTART_DATE());
         newUser.setEND_DATE(other.getEND_DATE());
 
@@ -114,12 +124,20 @@ public class Events implements Serializable {
         this.LOCATION = LOCATION;
     }
 
-    public int getINTERVAL() {
-        return INTERVAL;
+    public int getINTERVAL_TYPE() {
+        return INTERVAL_TYPE;
     }
 
-    public void setINTERVAL(int INTERVAL) {
-        this.INTERVAL = INTERVAL;
+    public void setINTERVAL_TYPE(int INTERVAL_TYPE) {
+        this.INTERVAL_TYPE = INTERVAL_TYPE;
+    }
+
+    public int getINTERVAL_VALUE() {
+        return INTERVAL_VALUE;
+    }
+
+    public void setINTERVAL_VALUE(int INTERVAL_VALUE) {
+        this.INTERVAL_VALUE = INTERVAL_VALUE;
     }
 
     public String getEVENT_TYPE() {
@@ -151,13 +169,25 @@ public class Events implements Serializable {
     @Override
     public String toString() {
         String info = "";
-        info += this.getEVENT_TYPE() + " " + this.getEVENT_NAME();
-        info += this.getEVENT_DESCRIPTION() + " ( " + this.getLOCATION() + ")";
-        info += "Event From " + this.getSTART_DATE() + "to" + this.getEND_DATE() + "\n";
+        info += "["+this.getEVENT_TYPE() +"]  " + this.getEVENT_NAME() +"\n";
+        info +=this.share_content();
         return info;
     }
     public String share_content(){
         String info = "";
-        info +=
+        info += "Time: " + this.get_time(this.getSTART_DATE()) + " to " + this.get_time(this.getEND_DATE()) + "\n";
+        info += this.getEVENT_DESCRIPTION() + " in " + this.getLOCATION();
+        return info;
+    }
+
+    public String get_time(Date date) {
+        return CustomCalendarView.final_all_time_and_date_format.format(date);
+    }
+    public String getEVENT_COLOR() {
+        return EVENT_COLOR;
+    }
+
+    public void setEVENT_COLOR(String EVENT_COLOR) {
+        this.EVENT_COLOR = EVENT_COLOR;
     }
 }

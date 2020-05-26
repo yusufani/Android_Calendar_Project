@@ -9,8 +9,12 @@ public class DBStructure {
     public static final String EVENT_NAME ="EVENT_NAME";
     public static final String EVENT_DESCRIPTION = "EVENT_DESCRIPTION";
     public static final String EVENT_LOCATION = "EVENT_LOCATION";
-    public static final String EVENT_FREQUENCY = "EVENT_FREQUENCY";
+
+    public static final String EVENT_INTERVAL_TYPE = "INTERVAL_TYPE";
+    public static final String EVENT_INTERVAL_VALUE = "INTERVAL_VALUE";
+
     public static final String EVENT_TYPE = "EVENT_TYPE";
+    public static final String EVENT_COLOR= "EVENT_COLOR";
     public static final String EVENT_START_DATE = "EVENT_START_DATE";
     public static final String EVENT_END_DATE = "EVENT_END_DATE";
     public static final String EVENT_DONE = "EVENT_DONE";

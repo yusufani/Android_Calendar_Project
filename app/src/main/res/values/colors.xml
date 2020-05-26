@@ -1,9 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="Darkest">#000000</color>
+    <color name="Dark">#430033</color>
+    <color name="darkDay">#e30425</color>
+    <color name="dark_Button_background">#04381A</color>
+    <color name="dark_Button_edge">#FFFFFF</color>
+    <color name="dark_day_card_edge">#252525</color>
+    <color name="dark_circle_background">#333131</color>
+    <color name="dark_active_day">#0f4c75</color>
+    <color name="dark_new_event_background">#000C13</color>
+    <color name="dark_edit_text_background">#D5CAA4</color>
+    <color name="dark_edit_text_edge">#FFFFFF</color>
+
+
+
+    <color name="lighest">#0f4c75</color>
+    <color name="light">#723535</color>
+    <color name="lightDay">#631377</color>
+    <color name="light_Button_background">#E26009</color>
+    <color name="light_Button_edge">#1F1D1D</color>
+    <color name="light_card_edge">#68FFFFFF</color>
+    <color name="light_active_day">#A75926</color>
+    <color name="light_new_event_background">#0f4c75</color>
+    <color name="light_edit_text_background">#630272</color>
+    <color name="light_edit_text_edge">#FFFFFF</color>
+
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
     <color name="green">@android:color/holo_green_dark</color>
-
-    <color name="black_overlay">#66000000</color>
 </resources>

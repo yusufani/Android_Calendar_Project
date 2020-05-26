@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/activity_monthly_calendar_layout">
     <LinearLayout
+        android:layout_weight="4"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="horizontal"
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
-        android:background="#020824">
+        >
 
         <ImageButton
             android:layout_width="40dp"
@@ -57,15 +60,12 @@
             android:layout_margin="10dp" />
     </LinearLayout>
 
-
-
-        <LinearLayout
+    <LinearLayout
             android:layout_weight="1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
             <LinearLayout
-                android:background="#020824"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
@@ -74,15 +74,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
                     <TextView
-
                         android:textColor="#FFFFFF"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:text="Week"
+                        android:text="Week\nNo"
                         android:textSize="12dp"
-                        android:background="#46059E"
-                        android:layout_marginTop="4dp"
+                        android:background="@drawable/week_back"
                         android:textStyle="bold" />
                 </LinearLayout>
                 <LinearLayout
@@ -90,17 +88,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
-                    android:paddingTop="4dp"
-                    android:paddingBottom="4dp"
                     >
                     <TextView
                         android:layout_weight="1"
-
+                        android:textColor="#FFFFFF"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:text="@string/sunday"
-                        android:background="#CC8855"
+                        android:background="@drawable/day_dark_back"
                         android:textStyle="bold" />
                     <TextView
                         android:layout_weight="1"
@@ -109,57 +105,62 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:text="@string/monday"
-                        android:background="#C0560D"
+                        android:background="@drawable/day_dark_back"
                         android:textStyle="bold" />
 
                     <TextView
                         android:layout_weight="1"
+                        android:textColor="#FFFFFF"
 
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:text="@string/tuesday"
-                        android:background="#CC8855"
+                        android:background="@drawable/day_dark_back"
                         android:textStyle="bold" />
 
                     <TextView
                         android:layout_weight="1"
+                        android:textColor="#FFFFFF"
 
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:text="@string/wednesday"
-                        android:background="#C0560D"
+                        android:background="@drawable/day_dark_back"
                         android:textStyle="bold" />
 
                     <TextView
                         android:layout_weight="1"
+                        android:textColor="#FFFFFF"
 
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:text="@string/thursday"
-                        android:background="#CC8855"
+                        android:background="@drawable/day_dark_back"
                         android:textStyle="bold" />
 
                     <TextView
                         android:layout_weight="1"
+                        android:textColor="#FFFFFF"
 
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:text="@string/friday"
-                        android:background="#C0560D"
+                        android:background="@drawable/day_dark_back"
                         android:textStyle="bold" />
 
                     <TextView
                         android:layout_weight="1"
+                        android:textColor="#FFFFFF"
 
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:text="@string/saturday"
-                        android:background="#CC8855"
+                        android:background="@drawable/day_dark_back"
                         android:textStyle="bold" />
 
 
@@ -170,29 +171,34 @@
             <LinearLayout
 
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="horizontal">
                 <LinearLayout
-                    android:background="#124DEE"
-
                     android:layout_weight="12"
                     android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="match_parent">
                     <TextView
+                        android:background="@drawable/week_back"
+                        android:textColor="#ffff"
+                        android:layout_weight="1"
                         android:id="@+id/CUSTOM_CAL_week_no_1"
                         android:gravity="center"
                         android:text="1"
                         android:layout_width="match_parent"
                         android:layout_height="60dp" />
                     <TextView
+                        android:background="@drawable/week_back"                        android:textColor="#ffff"
                         android:id="@+id/CUSTOM_CAL_week_no_2"
                         android:gravity="center"
+                        android:layout_weight="1"
 
                         android:text="2"
                         android:layout_width="match_parent"
                         android:layout_height="60dp" />
                     <TextView
+                        android:layout_weight="1"
+                        android:background="@drawable/week_back"                        android:textColor="#ffff"
                         android:id="@+id/CUSTOM_CAL_week_no_3"
                         android:gravity="center"
                         android:text="3"
@@ -202,34 +208,84 @@
                         android:id="@+id/CUSTOM_CAL_week_no_4"
                         android:gravity="center"
                         android:text="4"
+                        android:layout_weight="1"
+                        android:background="@drawable/week_back"                        android:textColor="#ffff"
                         android:layout_width="match_parent"
                         android:layout_height="60dp" />
                     <TextView
                         android:id="@+id/CUSTOM_CAL_week_no_5"
                         android:gravity="center"
-
+                        android:layout_weight="1"
+                        android:background="@drawable/week_back"                        android:textColor="#ffff"
                         android:text="5"
                         android:layout_width="match_parent"
                         android:layout_height="60dp" />
                     <TextView
+                        android:background="@drawable/week_back"                        android:textColor="#ffff"
+                        android:layout_weight="1"
                         android:id="@+id/CUSTOM_CAL_week_no_6"
                         android:gravity="center"
                         android:text="6"
                         android:layout_width="match_parent"
                         android:layout_height="60dp" />
+
                 </LinearLayout>
-                <GridView
+                <LinearLayout
+                    android:id="@+id/monthly_linear"
+
                     android:layout_weight="1"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/monthly_grid"
-                    android:numColumns="7">
+                    android:layout_height="match_parent">
+                    <GridView
+                        android:id="@+id/monthly_grid"
 
-                </GridView>
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:numColumns="7"
+                        >
+
+                    </GridView>
+
+                </LinearLayout>
+
 
         </LinearLayout>
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_weight="4"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
 
+    <TextView
+        android:layout_weight="1"
+        android:background="@drawable/stroke_only"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </TextView>
+        <LinearLayout
+            android:gravity="center"
+            android:background="@drawable/stroke_only"
+            android:layout_weight="4"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:padding="20dp"
+                android:id="@+id/fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="?attr/deepest"
+                app:maxImageSize="80dp"
+                android:fadingEdgeLength="5dp"
+                app:borderWidth="0dp"
+                app:elevation="1dp"
+                app:fabSize="mini"
+                app:pressedTranslationZ="0dp"
+                app:srcCompat="@mipmap/add" />
+        </LinearLayout>
+
+</LinearLayout>
 
 </LinearLayout>

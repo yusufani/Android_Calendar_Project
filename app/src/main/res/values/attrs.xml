@@ -9,4 +9,17 @@
         <attr name="metaButtonBarButtonStyle" format="reference" />
     </declare-styleable>
 
+    <attr name="deepest" format="color"/>
+    <attr name="deep" format="color"/>
+    <attr name="card_day_background" format="color" />
+    <attr name="card_day_edge_background" format="color" />
+    <attr name="circle_background" format="color" />
+    <attr name="active_days_card_background" format="color" />
+    <attr name="new_event_background" format="color" />
+    <attr name="edit_text_background" format="color" />
+    <attr name="edit_text_edge" format="color" />
+    <attr name="button_background" format="color" />
+    <attr name="button_edge" format="color" />
+
+
 </resources>

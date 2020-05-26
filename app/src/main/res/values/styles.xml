@@ -1,32 +1,62 @@
 <resources>
 
+
+    <style name="dark_theme"
+        parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="deepest">@color/Darkest</item>
+        <item name="deep">@color/Dark</item>
+        <item name="card_day_background">@color/darkDay</item>
+        <item name="card_day_edge_background">@color/dark_day_card_edge</item>
+        <item name="circle_background">@color/dark_circle_background</item>
+        <item name="active_days_card_background">@color/dark_active_day</item>
+        <item name="new_event_background">@color/dark_new_event_background</item>
+        <item name="edit_text_background">@color/dark_edit_text_background</item>
+        <item name="edit_text_edge">@color/dark_edit_text_edge</item>
+        <item name="button_background">@color/dark_Button_background</item>
+        <item name="button_edge">@color/dark_Button_edge</item>
+
+
+    </style>
+
+
+
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="deepest">@color/lighest</item>
+        <item name="deep">@color/light</item>
+        <item name="card_day_background">@color/lightDay</item>
+        <item name="card_day_edge_background">@color/lightDay</item>
+        <item name="active_days_card_background">@color/light_active_day</item>
+        <item name="new_event_background">@color/light_new_event_background</item>
+        <item name="edit_text_background">@color/light_edit_text_background</item>
+        <item name="edit_text_edge">@color/light_edit_text_edge</item>
+        <item name="button_background">@color/light_Button_background</item>
+        <item name="button_edge">@color/light_Button_edge</item>
     </style>
+
 
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
-
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name="FullscreenTheme" parent="AppTheme">
-        <item name="android:actionBarStyle">@style/FullscreenActionBarStyle</item>
-        <item name="android:windowActionBarOverlay">true</item>
-        <item name="android:windowBackground">@null</item>
-        <item name="metaButtonBarStyle">?android:attr/buttonBarStyle</item>
-        <item name="metaButtonBarButtonStyle">?android:attr/buttonBarButtonStyle</item>
-    </style>
+
 
     <style name="FullscreenActionBarStyle" parent="Widget.AppCompat.ActionBar">
-        <item name="android:background">@color/black_overlay</item>
+        <item name="android:background">@color/Darkest</item>
     </style>
-
+    <style name="Spinner" parent="Widget.AppCompat.Light.DropDownItem.Spinner">
+        <item name="android:paddingStart">0dp</item>
+        <item name="android:paddingEnd">0dp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">12sp</item>
+    </style>
 </resources>

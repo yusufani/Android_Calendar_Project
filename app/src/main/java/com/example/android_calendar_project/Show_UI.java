@@ -1,5 +1,6 @@
 package com.example.android_calendar_project;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -20,7 +21,7 @@ public class Show_UI extends AppCompatActivity {
         initialize_layout();
         int id = getIntent().getIntExtra("event_id", -1);
         event = CustomCalendarView.get_event(id, getApplicationContext());
-        info.setText(event.toString());
+        info.setText(event.getEVENT_NAME() +"\n\n"+event.share_content());
     }
 
     private void initialize_layout() {
@@ -33,6 +34,7 @@ public class Show_UI extends AppCompatActivity {
             public void onClick(View v) {
                 event.setDONE(true);
                 CustomCalendarView.update_event(event, getApplicationContext());
+                finish();
             }
         });
         close.setOnClickListener(new View.OnClickListener() {
@@ -40,12 +42,18 @@ public class Show_UI extends AppCompatActivity {
             public void onClick(View v) {
                 event.setDONE(false);
                 CustomCalendarView.update_event(event, getApplicationContext());
+                finish();
             }
         });
         go.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Not implemented yet ", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "Not implemented yet ", Toast.LENGTH_SHORT).show();
+                Intent new_intent = new Intent(getApplicationContext(), Event_Main_Activity.class);
+                new_intent.putExtra("event_id", event.getEVENT_ID());
+                new_intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                getApplicationContext().startActivity(new_intent);
+                finish();
             }
         });
 

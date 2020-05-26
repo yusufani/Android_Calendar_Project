@@ -129,13 +129,33 @@
            android:textSize="30sp"
            android:textStyle="bold">
        </CheckBox>
-       <Spinner
-           android:visibility="gone"
-           android:id="@+id/spinner_reminder_mp3s"
+       <RelativeLayout
+           android:layout_gravity="center"
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
-           android:backgroundTint="#00FF0A0A"
-           android:backgroundTintMode="add" />
+           android:layout_marginRight="3dp"
+           android:layout_weight="1"
+           android:background="@drawable/spinner_back_"
+           android:orientation="horizontal">
+
+           <Spinner
+               android:id="@+id/spinner_reminder_mp3s"
+               android:layout_width="match_parent"
+               android:layout_height="match_parent"
+               android:layout_centerVertical="true"
+               android:layout_gravity="center"
+               android:gravity="center"
+               android:spinnerMode="dropdown" />
+
+           <ImageView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_alignParentRight="true"
+               android:layout_centerVertical="true"
+               android:layout_gravity="center"
+               android:src="@mipmap/bottom_arrow" />
+
+       </RelativeLayout>
        <Button
            android:background="@drawable/button_back"
            android:layout_width="wrap_content"

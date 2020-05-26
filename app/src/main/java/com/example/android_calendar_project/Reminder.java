@@ -129,12 +129,22 @@ public class Reminder implements Serializable {
     }
 
 
-    public String get_time() {
-        String time = "";
-        time += String.valueOf(this.getREMIND_DATE());
-        time += ":";
-        return time;
+    public String get_time(Date date) {
+        return CustomCalendarView.final_all_time_and_date_format.format(date);
     }
-
+    public String share_content(){
+        String info = "";
+        info += "Time: " + this.get_time(this.getREMIND_DATE()) ;
+        if (this.getSHOW_ALERT_DIAOLOG()){
+            info += "- Alert Dialog\n";
+        }
+        if(this.getVIBRATION()){
+            info +="- Vibration \n";
+        }
+        if(this.getSHOW_NOTIFICATION()){
+            info +="- Notification \n";
+        }
+        return info;
+    }
 
 }

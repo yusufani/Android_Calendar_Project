@@ -19,8 +19,10 @@ public class DBOpenHelper extends SQLiteOpenHelper {
             DBStructure.EVENT_NAME+" TEXT NOT NULL,"+
             DBStructure.EVENT_DESCRIPTION+" TEXT ,"+
             DBStructure.EVENT_LOCATION +" TEXT ,"+
-            DBStructure.EVENT_FREQUENCY + " INT NOT NULL," +
+            DBStructure.EVENT_INTERVAL_TYPE + " INT NOT NULL," +
+            DBStructure.EVENT_INTERVAL_VALUE + " INT NOT NULL," +
             DBStructure.EVENT_TYPE+" TEXT NOT NULL,"+
+            DBStructure.EVENT_COLOR+" TEXT NOT NULL,"+
             DBStructure.EVENT_START_DATE + " DATE NOT NULL," +
             DBStructure.EVENT_END_DATE + " INTEGER ," +
             DBStructure.EVENT_DONE +" INTEGER NOT NULL"+
@@ -72,23 +74,27 @@ public class DBOpenHelper extends SQLiteOpenHelper {
     }
     public void save_Event(Events event  ,SQLiteDatabase database){
         ContentValues contentValues = new ContentValues();
-        contentValues.put( DBStructure.EVENT_NAME ,event.getEVENT_NAME() );
-        contentValues.put(DBStructure.EVENT_FREQUENCY, event.getINTERVAL());
-        contentValues.put( DBStructure.EVENT_TYPE ,event.getEVENT_TYPE() );
+        contentValues.put(DBStructure.EVENT_NAME, event.getEVENT_NAME());
+        contentValues.put(DBStructure.EVENT_INTERVAL_TYPE, event.getINTERVAL_TYPE());
+        contentValues.put(DBStructure.EVENT_INTERVAL_VALUE, event.getINTERVAL_VALUE());
+        contentValues.put(DBStructure.EVENT_TYPE, event.getEVENT_TYPE());
+        contentValues.put( DBStructure.EVENT_COLOR ,event.getEVENT_COLOR() );
         contentValues.put(DBStructure.EVENT_START_DATE, CustomCalendarView.final_all_time_and_date_format.format(event.getSTART_DATE()));
         contentValues.put(DBStructure.EVENT_END_DATE, CustomCalendarView.final_all_time_and_date_format.format(event.getEND_DATE()));
-        contentValues.put( DBStructure.EVENT_DESCRIPTION ,event.getEVENT_DESCRIPTION() );
-        contentValues.put( DBStructure.EVENT_DONE,event.getDONE() );
-        contentValues.put( DBStructure.EVENT_LOCATION, event.getLOCATION());
-        contentValues.put(DBStructure.EVENT_PARENT_ID,event.getPARENT_EVENT_ID());
+        contentValues.put(DBStructure.EVENT_DESCRIPTION, event.getEVENT_DESCRIPTION());
+        contentValues.put(DBStructure.EVENT_DONE, event.getDONE());
+        contentValues.put(DBStructure.EVENT_LOCATION, event.getLOCATION());
+        contentValues.put(DBStructure.EVENT_PARENT_ID, event.getPARENT_EVENT_ID());
         database.insert(DBStructure.EVENT_TABLE_NAME, null,contentValues);
     }
 
     public void update_event(Events event, SQLiteDatabase database) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(DBStructure.EVENT_NAME, event.getEVENT_NAME());
-        contentValues.put(DBStructure.EVENT_FREQUENCY, event.getINTERVAL());
+        contentValues.put(DBStructure.EVENT_INTERVAL_TYPE, event.getINTERVAL_TYPE());
+        contentValues.put(DBStructure.EVENT_INTERVAL_VALUE, event.getINTERVAL_VALUE());
         contentValues.put(DBStructure.EVENT_TYPE, event.getEVENT_TYPE());
+        contentValues.put( DBStructure.EVENT_COLOR ,event.getEVENT_COLOR() );
         contentValues.put(DBStructure.EVENT_START_DATE, CustomCalendarView.final_all_time_and_date_format.format(event.getSTART_DATE()));
         contentValues.put(DBStructure.EVENT_END_DATE, CustomCalendarView.final_all_time_and_date_format.format(event.getEND_DATE()));
         contentValues.put(DBStructure.EVENT_DESCRIPTION, event.getEVENT_DESCRIPTION());
@@ -104,6 +110,12 @@ public class DBOpenHelper extends SQLiteOpenHelper {
         String selection = "ID =? OR "+DBStructure.EVENT_PARENT_ID +"=?";
         String[] selectionArgs = {String.valueOf(id), String.valueOf(id)};
         database.delete(DBStructure.EVENT_TABLE_NAME,selection,selectionArgs);
+     }
+
+     public void delete_reminders(int event_id , SQLiteDatabase database){
+         String selection = DBStructure.EVENT_ID +"=?";
+         String[] selectionArgs = {String.valueOf(event_id)};
+         database.delete(DBStructure.REMINDER_TABLE_NAME,selection,selectionArgs);
      }
 
     public Cursor read_reminders(String id , SQLiteDatabase database){
@@ -169,14 +181,16 @@ public class DBOpenHelper extends SQLiteOpenHelper {
     public Cursor ReadEventperWeek(Date start_date, Date end_date, SQLiteDatabase database) {
 
         String[] Projections = get_event_projects();
-        String Selections = DBStructure.EVENT_START_DATE + "<=? AND " + DBStructure.EVENT_END_DATE + ">=?";
-        String[] SelectionArgs = {CustomCalendarView.final_all_time_and_date_format.format(start_date), CustomCalendarView.final_all_time_and_date_format.format(end_date)};
+        String Selections = DBStructure.EVENT_START_DATE + "<=? AND " + DBStructure.EVENT_START_DATE + ">=?";
+        String ST = CustomCalendarView.final_all_time_and_date_format.format(start_date);
+        String ED = CustomCalendarView.final_all_time_and_date_format.format(end_date);
+        String[] SelectionArgs = {ED,ST };
         Log.v(TAG, Selections.toLowerCase() + SelectionArgs[0].toLowerCase() + SelectionArgs[1].toLowerCase());
         return database.query(DBStructure.EVENT_TABLE_NAME, Projections, Selections, SelectionArgs, null, null, null);
     }
 
     public String[] get_event_projects() {
-        String[] projects = {"ID", DBStructure.EVENT_NAME, DBStructure.EVENT_PARENT_ID, DBStructure.EVENT_FREQUENCY, DBStructure.EVENT_TYPE, DBStructure.EVENT_START_DATE, DBStructure.EVENT_END_DATE, DBStructure.EVENT_DESCRIPTION, DBStructure.EVENT_DONE, DBStructure.EVENT_LOCATION};
+        String[] projects = {"ID", DBStructure.EVENT_NAME, DBStructure.EVENT_PARENT_ID, DBStructure.EVENT_INTERVAL_TYPE,DBStructure.EVENT_INTERVAL_VALUE, DBStructure.EVENT_TYPE,DBStructure.EVENT_COLOR, DBStructure.EVENT_START_DATE, DBStructure.EVENT_END_DATE, DBStructure.EVENT_DESCRIPTION, DBStructure.EVENT_DONE, DBStructure.EVENT_LOCATION};
         return projects;
     }
 
@@ -205,10 +219,12 @@ public class DBOpenHelper extends SQLiteOpenHelper {
         int EVENT_PARENT_ID = cursor.getInt(cursor.getColumnIndex(DBStructure.EVENT_PARENT_ID));
         String EVENT_DESCRIPTION = cursor.getString(cursor.getColumnIndex(DBStructure.EVENT_DESCRIPTION));
         String LOCATION = cursor.getString(cursor.getColumnIndex(DBStructure.EVENT_LOCATION));
-        int FREQUENCY = cursor.getInt(cursor.getColumnIndex(DBStructure.EVENT_FREQUENCY));
+        int INTERVAL_TYPE = cursor.getInt(cursor.getColumnIndex(DBStructure.EVENT_INTERVAL_TYPE));
+        int INTERVAL_VALUE = cursor.getInt(cursor.getColumnIndex(DBStructure.EVENT_INTERVAL_VALUE));
         String EVENT_TYPE = cursor.getString(cursor.getColumnIndex(DBStructure.EVENT_TYPE));
         String START_DATE_s = cursor.getString(cursor.getColumnIndex(DBStructure.EVENT_START_DATE));
         String END_DATE_s = cursor.getString(cursor.getColumnIndex(DBStructure.EVENT_END_DATE));
+        String EVENT_COLOR = cursor.getString(cursor.getColumnIndex(DBStructure.EVENT_COLOR));
         Date START_DATE = null, END_DATE = null;
         try {
             START_DATE = CustomCalendarView.final_all_time_and_date_format.parse(START_DATE_s);
@@ -216,10 +232,11 @@ public class DBOpenHelper extends SQLiteOpenHelper {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        int done = cursor.getInt(cursor.getColumnIndex(DBStructure.EVENT_NAME));
+        int done = cursor.getInt(cursor.getColumnIndex(DBStructure.EVENT_DONE));
         boolean DONE = false;
-        if (done == 1) DONE = true;
-        return new Events(EVENT_ID, EVENT_NAME, EVENT_DESCRIPTION, LOCATION, FREQUENCY, EVENT_TYPE,
+        if (done == 1)
+            DONE = true;
+        return new Events(EVENT_ID, EVENT_NAME, EVENT_COLOR,EVENT_DESCRIPTION, LOCATION, INTERVAL_TYPE,INTERVAL_VALUE ,EVENT_TYPE,
                 START_DATE, END_DATE,
                 DONE, EVENT_PARENT_ID);
     }
@@ -250,6 +267,53 @@ public class DBOpenHelper extends SQLiteOpenHelper {
         String[] Projections = get_event_projects();
         String Selections = "";
         String[] SelectionArgs = {};
-        return database.query(DBStructure.EVENT_TABLE_NAME, Projections, Selections, SelectionArgs, null, null, null);
+        String order = DBStructure.EVENT_START_DATE + " ASC";
+        return database.query(DBStructure.EVENT_TABLE_NAME, Projections, Selections, SelectionArgs, null, null, order);
     }
+    public int get_number_of_events(SQLiteDatabase db){
+        String countQuery = "SELECT  * FROM " + DBStructure.EVENT_TABLE_NAME;
+        Cursor cursor = db.rawQuery(countQuery, null);
+        int count = cursor.getCount();
+        cursor.close();
+        return count;
+    }
+    public int get_number_of_reminders(SQLiteDatabase db){
+        String countQuery = "SELECT  * FROM " + DBStructure.REMINDER_TABLE_NAME;
+        Cursor cursor = db.rawQuery(countQuery, null);
+        int count = cursor.getCount();
+        cursor.close();
+        return count;
+    }
+    public int get_number_of_completed_events(SQLiteDatabase db){
+        String[] Projections = get_event_projects();
+        String Selections = DBStructure.EVENT_DONE + "=?";
+        String[] SelectionArgs = {"1"};
+        Cursor cursor =  db.query(DBStructure.EVENT_TABLE_NAME, Projections, Selections, SelectionArgs, null, null, null);
+        int count = cursor.getCount();
+        cursor.close();
+        return count;
+    }
+
+    public Cursor get_most_common_color_of_events(SQLiteDatabase db){
+        String[] Projections = { DBStructure.EVENT_COLOR  , "Count("+ DBStructure.EVENT_COLOR+"  )"} ;
+        String group = DBStructure.EVENT_COLOR;
+        String order =  "Count("+ DBStructure.EVENT_COLOR+"  )"+"DESC";
+        return db.query(DBStructure.EVENT_TABLE_NAME, Projections, null, null, group, null, order);
+    }
+    public Cursor get_most_common_mp3_of_reminders(SQLiteDatabase db){
+        String[] Projections = { DBStructure.REMIND_RING_TONE  , "Count("+ DBStructure.REMIND_RING_TONE+"  )"} ;
+        String group = DBStructure.REMIND_RING_TONE;
+        String order = "Count("+ DBStructure.REMIND_RING_TONE+"  )"+"DESC";
+        return db.query(DBStructure.REMINDER_TABLE_NAME, Projections, null, null, group, null, order);
+    }
+    public int get_interval_rate(SQLiteDatabase db){
+        String[] Projections = get_event_projects();
+        String Selections = DBStructure.EVENT_INTERVAL_TYPE + "=?";
+        String[] SelectionArgs = {"0"};
+        Cursor cursor =  db.query(DBStructure.EVENT_TABLE_NAME, Projections, Selections, SelectionArgs, null, null, null);
+        int count = cursor.getCount();
+        cursor.close();
+        return count;
+    }
+
 }

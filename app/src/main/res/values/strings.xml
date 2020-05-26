@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Android_Calendar_Project</string>
+    <string name="app_name">CA-Calendar</string>
     <string name="action_settings">Settings</string>
 
     Main Layout
@@ -9,11 +9,11 @@
     Days
     <string name="sunday">Sun</string>
     <string name="monday">Mon</string>
-    <string name="tuesday">Tues</string>
-    <string name="wednesday">Wednes</string>
-    <string name="thursday">Thurs</string>
+    <string name="tuesday">Tus</string>
+    <string name="wednesday">Wed</string>
+    <string name="thursday">Thu</string>
     <string name="friday">Fri</string>
-    <string name="saturday">Satur</string>
+    <string name="saturday">Sat</string>
 
 
     Add Event
@@ -110,5 +110,13 @@
     <string name="google_maps_key">AIzaSyAhiAD3b9zrYWv-DEQpgROXtFkKcPzHW7Q</string>
     <string name="get_selected_location">Get Selected Location</string>
     <string name="show_all_events">Show All Events</string>
+    <string name="select_start_date">Start Date Not Selected</string>
+    <string name="share_event">Share Event</string>
+    <string name="default_alarm_delay_time">Default Alarm Delay Time</string>
+    <string name="completed_event_number">Completed Event Number</string>
+    <string name="number_of_events">Number Of Events</string>
+    <string name="number_of_reminders">Number Of Reminders</string>
+    <string name="show_statistics">Show Statistics</string>
+    <string name="show_upcoming_events">Show Upcoming Events</string>
 
 </resources>

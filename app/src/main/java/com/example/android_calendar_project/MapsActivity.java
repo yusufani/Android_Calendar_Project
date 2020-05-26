@@ -198,26 +198,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onMapLongClick(LatLng latLng) {
-        Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
-        String address = "";
-
-        try {
-            List<Address> addressList = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
-
-            if (addressList != null && addressList.size() > 0) {
-                if (addressList.get(0).getThoroughfare() != null) {
-                    address += addressList.get(0).getAddressLine(0);
-                }
-            } else {
-                address = "New Place";
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        setAdress(latLng);
         mMap.clear();
-        mMap.addMarker(new MarkerOptions().title(address).position(latLng));
-        location_Adress = address;
+        mMap.addMarker(new MarkerOptions().title(location_Adress).position(latLng));
         Toast.makeText(getApplicationContext(), "Place selected!", Toast.LENGTH_SHORT).show();
 
 
@@ -236,6 +219,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                 } else {
                                     locations = location;
                                     LatLng s = new LatLng(locations.getLatitude(), locations.getLongitude());
+                                    setAdress(s);
                                     mMap.addMarker(new MarkerOptions().title("You are here").position(s));
                                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(s, 15));
                                 }
@@ -294,6 +278,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onMapClick(LatLng latLng) {
+        setAdress(latLng);
+
+        mMap.clear();
+
+        mMap.addMarker(new MarkerOptions().title(location_Adress).position(latLng));
+        Toast.makeText(getApplicationContext(), "Place selected!", Toast.LENGTH_SHORT).show();
+    }
+
+    private void setAdress(LatLng latLng) {
         Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
         String address = "";
 
@@ -311,10 +304,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         } catch (IOException e) {
             e.printStackTrace();
         }
-        mMap.clear();
-
-        mMap.addMarker(new MarkerOptions().title(address).position(latLng));
         location_Adress = address;
-        Toast.makeText(getApplicationContext(), "Place selected!", Toast.LENGTH_SHORT).show();
     }
 }

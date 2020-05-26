@@ -35,13 +35,13 @@ public class Reminder_Recyler_Adapter extends RecyclerView.Adapter<Reminder_Recy
         holder.date_info.setText(r.getREMIND_DATE().toString());
         String infos = "";
         if (r.getPLAY_RINGTONE()) {
-            infos += "Play Ringtone with" + r.getRING_TONE() + "\n";
+            infos += "Alarm Tone  : " + r.getRING_TONE() + "\n";
         }
         if (r.getVIBRATION()) {
             infos += "Vibration set\n";
         }
         if (r.getSHOW_ALERT_DIAOLOG()) {
-            infos += "UI wiil show";
+            infos += "UI set";
         }
         holder.reminder_info.setText(infos);
         holder.delete.setOnClickListener(new View.OnClickListener() {
